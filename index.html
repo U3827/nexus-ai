@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b12">
+  <meta name="description" content="NEXUS AI — Your space for thinking, learning, coding and creating.">
+  <title>NEXUS AI — Think Beyond</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090b12;
+      --panel: #10131e;
+      --border: #252938;
+      --text: #f4f5ff;
+      --muted: #9399ad;
+      --accent: #a78bfa;
+      --cyan: #67e8f9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      padding: 25px 17px;
+      background: #0d1019;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .logo {
+      width: 39px;
+      height: 39px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      font-weight: 800;
+      color: #10101b;
+      background: linear-gradient(135deg, var(--cyan), var(--accent));
+      box-shadow: 0 0 25px #a78bfa24;
+    }
+
+    .brand-name { font-weight: 800; letter-spacing: 1.8px; }
+    .brand-sub { color: var(--muted); font-size: 10px; margin-top: 3px; letter-spacing: 2px; }
+
+    .new-chat, .nav-item {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .new-chat { background: #a78bfa13; border-color: #a78bfa40; }
+    .nav-item { border-color: transparent; color: #b5b9ca; margin-top: 5px; }
+    .new-chat:hover, .nav-item:hover { background: #ffffff0b; }
+
+    .section-label {
+      color: #737b91;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      margin: 0 0 12px 10px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 70px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .model-label { font-size: 13px; color: #d9d7ef; }
+    .status {
+      font-size: 11px;
+      color: var(--cyan);
+      border: 1px solid #67e8f92c;
+      background: #67e8f90b;
+      border-radius: 20px;
+      padding: 7px 10px;
+    }
+
+    .conversation {
+      width: min(760px, 100%);
+      padding: 35px 24px 20px;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    .welcome { text-align: center; padding: 9vh 0 30px; }
+
+    .orb {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      margin: 0 auto 25px;
+      display: grid;
+      place-items: center;
+      font-size: 35px;
+      background: radial-gradient(circle at 35% 30%, #d8c8ff, #8b5cf6 45%, #20204b 78%);
+      box-shadow: 0 0 65px #8b5cf633;
+    }
+
+    h1 { font-size: clamp(30px, 5vw, 45px); letter-spacing: -1.7px; margin: 0 0 13px; }
+    .gradient {
+      background: linear-gradient(100deg, #c4b5fd, #67e8f9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 440px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .suggestions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 34px;
+    }
+
+    .suggestion {
+      padding: 16px;
+      min-height: 83px;
+      text-align: left;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .suggestion:hover { border-color: #a78bfa88; transform: translateY(-1px); }
+    .suggestion span { display: block; color: var(--muted); font-size: 11px; margin-top: 5px; }
+
+    .messages { display: grid; gap: 20px; padding-bottom: 25px; }
+    .message { line-height: 1.7; font-size: 14px; overflow-wrap: anywhere; }
+    .message.user {
+      justify-self: end;
+      max-width: 85%;
+      padding: 12px 16px;
+      background: #a78bfa19;
+      border: 1px solid #a78bfa35;
+      border-radius: 16px 16px 4px 16px;
+    }
+
+    .message.notice {
+      color: var(--muted);
+      background: var(--panel);
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .composer-wrap { padding: 12px 24px 25px; }
+    .composer { max-width: 710px; margin: 0 auto; }
+
+    .input-box {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #34394d;
+      background: #121521;
+      border-radius: 17px;
+      box-shadow: 0 12px 45px #0003;
+    }
+
+    textarea {
+      flex: 1;
+      min-width: 0;
+      max-height: 160px;
+      resize: vertical;
+      background: transparent;
+      color: var(--text);
+      border: 0;
+      outline: none;
+      padding: 8px 4px;
+      font-size: 14px;
+    }
+
+    textarea::placeholder { color: #777f95; }
+
+    .send {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      color: #10101b;
+      font-size: 19px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan), var(--accent));
+    }
+
+    .send:disabled { opacity: .4; cursor: not-allowed; }
+
+    .disclaimer {
+      text-align: center;
+      color: #72798e;
+      font-size: 10px;
+      line-height: 1.7;
+      margin: 12px auto 0;
+    }
+
+    .mobile-brand { display: none; }
+
+    @media (max-width: 680px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      header { height: 61px; padding: 0 16px; }
+      .mobile-brand { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 800; letter-spacing: 1px; }
+      .mobile-brand .logo { width: 31px; height: 31px; font-size: 17px; }
+      .conversation { padding: 20px 17px; }
+      .welcome { padding: 8vh 0 24px; }
+      .orb { width: 65px; height: 65px; }
+      .suggestions { grid-template-columns: 1fr; gap: 8px; margin-top: 26px; }
+      .suggestion { min-height: auto; padding: 13px; }
+      .composer-wrap { padding: 10px 12px 18px; }
+      .status { font-size: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">N</div>
+        <div>
+          <div class="brand-name">NEXUS AI</div>
+          <div class="brand-sub">THINK BEYOND</div>
+        </div>
+      </div>
+
+      <button class="new-chat" id="newChat">＋ &nbsp; New conversation</button>
+
+      <div>
+        <p class="section-label">YOUR WORKSPACE</p>
+        <button class="nav-item" id="homeButton">⌂ &nbsp; New conversation</button>
+        <button class="nav-item" id="aboutButton">✧ &nbsp; About NEXUS AI</button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <strong>NEXUS AI</strong><br>
+        Built for curiosity.<br>
+        Designed for possibility.
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <div class="mobile-brand">
+          <div class="logo">N</div>
+          NEXUS AI
+        </div>
+        <div class="model-label">Assistant <span style="color:#777f95"> / Preview</span></div>
+        <div class="status">● Interface preview</div>
+      </header>
+
+      <section class="conversation">
+        <div class="welcome" id="welcome">
+          <div class="orb">✧</div>
+          <h1>Think beyond<br><span class="gradient">the ordinary.</span></h1>
+          <p class="subtitle">
+            A new space for ideas, learning, coding and discovery.
+            Your next breakthrough starts with a question.
+          </p>
+
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Help me build a professional website.">
+              ◇ &nbsp; Build something
+              <span>Plan a website or software project</span>
+            </button>
+            <button class="suggestion" data-prompt="Teach me a difficult topic step by step.">
+              ◎ &nbsp; Learn something
+              <span>Understand ideas more clearly</span>
+            </button>
+            <button class="suggestion" data-prompt="Help me debug and improve my code.">
+              ⌘ &nbsp; Write better code
+              <span>Explore programming and technology</span>
+            </button>
+            <button class="suggestion" data-prompt="Help me research an idea and create a plan.">
+              ↗ &nbsp; Explore an idea
+              <span>Turn your thoughts into a plan</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="messages" id="messages" aria-live="polite"></div>
+      </section>
+
+      <div class="composer-wrap">
+        <form class="composer" id="chatForm">
+          <div class="input-box">
+            <textarea id="prompt" rows="1" maxlength="4000"
+              placeholder="Ask NEXUS AI anything..."
+              aria-label="Your message"></textarea>
+            <button class="send" type="submit" aria-label="Send message">↑</button>
+          </div>
+          <p class="disclaimer">
+            Early interface preview · AI responses are not connected yet.
+            Do not enter private or sensitive information.
+          </p>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const promptBox = document.getElementById("prompt");
+    const form = document.getElementById("chatForm");
+    const messages = document.getElementById("messages");
+    const welcome = document.getElementById("welcome");
+
+    function startNewChat() {
+      messages.replaceChildren();
+      welcome.hidden = false;
+      promptBox.value = "";
+      promptBox.focus();
+    }
+
+    document.getElementById("newChat").addEventListener("click", startNewChat);
+    document.getElementById("homeButton").addEventListener("click", startNewChat);
+
+    document.getElementById("aboutButton").addEventListener("click", () => {
+      messages.replaceChildren();
+      welcome.hidden = true;
+
+      const note = document.createElement("div");
+      note.className = "message notice";
+      note.textContent =
+        "NEXUS AI is an independent AI platform in development. " +
+        "Our first milestone is the interface. Secure backend integration, " +
+        "real AI responses, accounts and conversation storage will come " +
+        "in later stages. This preview does not send your messages anywhere.";
+      messages.appendChild(note);
+    });
+
+    document.querySelectorAll("[data-prompt]").forEach(button => {
+      button.addEventListener("click", () => {
+        promptBox.value = button.dataset.prompt;
+        promptBox.focus();
+      });
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const text = promptBox.value.trim();
+      if (!text) return;
+
+      welcome.hidden = true;
+
+      const userMessage = document.createElement("div");
+      userMessage.className = "message user";
+      userMessage.textContent = text;
+      messages.appendChild(userMessage);
+
+      const notice = document.createElement("div");
+      notice.className = "message notice";
+      notice.textContent =
+        "Your interface is working! The AI engine has not been connected yet. " +
+        "That will be our next development milestone. Your message stays " +
+        "in this page only and is not sent to an AI provider.";
+
+      messages.appendChild(notice);
+      promptBox.value = "";
+      messages.scrollIntoView({ behavior: "smooth", block: "end" });
+    });
+  </script>
+</body>
+  </html>
+  
