@@ -1,4 +1,63 @@
 
+/* NEXUS AI — Chat message alignment */
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.messages > .message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.messages > .assistant-message {
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.messages > .user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.messages > .user-message .message-body {
+  flex: 0 1 auto;
+  width: fit-content;
+  max-width: min(80%, 680px);
+  padding: 12px 16px;
+  background: #e9edff;
+  border-radius: 18px 18px 4px 18px;
+  overflow-wrap: anywhere;
+}
+
+.messages > .assistant-message .message-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.messages > .user-message .message-heading {
+  text-align: right;
+}
+
+.messages > .user-message .message-content {
+  text-align: left;
+}
+
+.messages > .message .message-avatar {
+  flex: 0 0 36px;
+}
+
+@media (max-width: 600px) {
+  .messages > .user-message .message-body {
+    max-width: 85%;
+  }
+}
 :root {
   --bg: #f7f8fc;
   --surface: #ffffff;
